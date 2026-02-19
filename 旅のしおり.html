@@ -151,7 +151,7 @@
       width: max-content;
       animation: autoScroll 34s linear infinite;
     }
-    .photo-track:hover { animation-play-state: paused; }
+    /* gallery pause は JS で制御（タッチ対応のため） */
     @keyframes autoScroll {
       0%   { transform: translateX(0); }
       100% { transform: translateX(-50%); }
@@ -1321,6 +1321,32 @@
       }, 3400);
     }
   }
+
+  /* ===== ギャラリー スクロール制御（タッチ対応） ===== */
+  (function() {
+    var track = document.querySelector('.photo-track');
+    if (!track) return;
+    var galResumeTimer = null;
+
+    track.addEventListener('mouseenter', function() {
+      track.style.animationPlayState = 'paused';
+    });
+    track.addEventListener('mouseleave', function() {
+      track.style.animationPlayState = 'running';
+    });
+    function scheduleResume() {
+      if (galResumeTimer) clearTimeout(galResumeTimer);
+      galResumeTimer = setTimeout(function() {
+        track.style.animationPlayState = 'running';
+      }, 2500);
+    }
+    track.addEventListener('touchstart', function() {
+      track.style.animationPlayState = 'paused';
+      if (galResumeTimer) clearTimeout(galResumeTimer);
+    }, { passive: true });
+    track.addEventListener('touchend', scheduleResume, { passive: true });
+    track.addEventListener('touchcancel', scheduleResume, { passive: true });
+  })();
 
   /* Bind */
   document.querySelectorAll('.choice-card').forEach(function(card) {
