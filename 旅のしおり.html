@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    /* ===== Variables ===== */
     :root {
       --ink: #1a1612;
       --paper: #faf8f5;
@@ -17,7 +18,7 @@
       --border: #e5ddd0;
       --white: #fff;
       --shadow: 0 8px 32px rgba(26, 22, 18, 0.08);
-      --shadow-strong: 0 12px 40px rgba(26, 22, 18, 0.12);
+      --shadow-strong: 0 16px 48px rgba(26, 22, 18, 0.16);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -26,9 +27,10 @@
       background: var(--paper);
       color: var(--ink);
       line-height: 1.75;
+      overflow-x: hidden;
     }
 
-    /* ========== ヒーロー ========== */
+    /* ===== Hero ===== */
     .hero {
       min-height: 100vh;
       position: relative;
@@ -41,52 +43,158 @@
     .hero-bg {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(26,22,18,0.35) 0%, rgba(26,22,18,0.5) 100%),
-        url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&q=85') center/cover no-repeat;
+      background:
+        linear-gradient(180deg, rgba(26,22,18,0.28) 0%, rgba(26,22,18,0.58) 100%),
+        url('ロイきぬ/IMG_4236.jpg') center/cover no-repeat;
+      animation: heroZoom 22s ease-in-out infinite alternate;
+      transform-origin: center;
     }
-    .hero-inner { position: relative; z-index: 2; padding: 2rem; max-width: 560px; }
+    @keyframes heroZoom {
+      from { transform: scale(1.04); }
+      to   { transform: scale(1.12); }
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+      max-width: 560px;
+      animation: heroFadeIn 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    @keyframes heroFadeIn {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
     .hero h1 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.2rem, 6vw, 3.5rem);
+      font-size: clamp(2.4rem, 7vw, 3.8rem);
       font-weight: 600;
       color: var(--white);
-      text-shadow: 0 2px 24px rgba(0,0,0,0.4);
+      text-shadow: 0 2px 28px rgba(0,0,0,0.5);
       letter-spacing: 0.08em;
       margin-bottom: 0.5rem;
     }
-    .hero .sub { color: rgba(255,255,255,0.95); font-size: clamp(1rem, 2.5vw, 1.2rem); font-weight: 300; letter-spacing: 0.2em; }
+    .hero .sub {
+      color: rgba(255,255,255,0.95);
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      font-weight: 300;
+      letter-spacing: 0.22em;
+    }
     .hero .date {
-      margin-top: 2rem;
+      margin-top: 1.75rem;
       color: var(--gold-light);
-      font-size: clamp(0.9rem, 2vw, 1rem);
+      font-size: clamp(0.85rem, 2vw, 1rem);
       letter-spacing: 0.25em;
     }
+    .hero-family {
+      margin-top: 2.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .hero-family span {
+      background: rgba(255,255,255,0.16);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: rgba(255,255,255,0.92);
+      border: 1px solid rgba(255,255,255,0.28);
+      border-radius: 999px;
+      padding: 0.3rem 1rem;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      animation: heroFadeIn 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .hero-family span:nth-child(1) { animation-delay: 0.3s; }
+    .hero-family span:nth-child(2) { animation-delay: 0.5s; }
+    .hero-family span:nth-child(3) { animation-delay: 0.7s; }
 
-    /* ========== 共通セクション ========== */
+    /* ===== Scroll Reveal ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.75s ease, transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===== 共通セクション ===== */
     section { padding: 4rem 1.5rem; max-width: 960px; margin: 0 auto; }
     .section-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.6rem, 4vw, 2rem);
+      font-size: clamp(1.6rem, 4vw, 2.1rem);
       color: var(--gold);
       text-align: center;
       margin-bottom: 2rem;
       letter-spacing: 0.05em;
     }
-    .section-intro { text-align: center; margin-bottom: 2.5rem; color: var(--ink); opacity: 0.9; }
+    .section-intro { text-align: center; margin-bottom: 2.5rem; color: var(--ink); opacity: 0.88; }
 
-    /* ========== 固定予定（写真付き） ========== */
+    /* ===== 家族フォトギャラリー（自動スクロール） ===== */
+    #family-gallery {
+      padding: 2.5rem 0;
+      overflow: hidden;
+      background: linear-gradient(135deg, #fdf9f4 0%, #f2ece2 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .gallery-label {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.07em;
+    }
+    .photo-track-wrap { overflow: hidden; }
+    .photo-track {
+      display: flex;
+      gap: 1rem;
+      width: max-content;
+      animation: autoScroll 34s linear infinite;
+    }
+    .photo-track:hover { animation-play-state: paused; }
+    @keyframes autoScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .photo-item {
+      flex: 0 0 auto;
+      width: 196px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+    .photo-item:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: var(--shadow-strong);
+    }
+    .photo-item img {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-item .pcap {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 0.55rem 0.75rem;
+      background: linear-gradient(transparent, rgba(20,15,10,0.68));
+      color: #fff;
+      font-size: 0.76rem;
+      text-align: center;
+    }
+
+    /* ===== 固定予定 ===== */
     .fixed-schedule { background: var(--gold-bg); border-radius: 20px; padding: 2rem; margin: 2rem 0; }
     .schedule-table { width: 100%; border-collapse: collapse; font-size: 1rem; }
     .schedule-table th, .schedule-table td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid var(--border); }
     .schedule-table th { color: var(--gold); font-weight: 600; width: 32%; }
     .schedule-table tr:last-child th, .schedule-table tr:last-child td { border-bottom: none; }
-    .img-block {
-      border-radius: 16px;
-      overflow: hidden;
-      margin: 2rem 0;
-      box-shadow: var(--shadow);
-    }
-    .img-block img { width: 100%; height: 280px; object-fit: cover; display: block; }
+    .img-block { border-radius: 16px; overflow: hidden; margin: 2rem 0; box-shadow: var(--shadow); }
+    .img-block img { width: 100%; height: 280px; object-fit: cover; display: block; transition: transform 0.6s ease; }
+    .img-block:hover img { transform: scale(1.03); }
     .img-block .cap { padding: 0.75rem 1rem; background: var(--white); font-size: 0.85rem; color: var(--gold); text-align: center; }
     .detail { font-size: 0.8rem; color: #888; }
     .img-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 2rem 0; }
@@ -94,49 +202,226 @@
     .img-grid .img-block { margin: 0; }
     .img-grid .img-block img { height: 200px; }
 
-    /* ========== プラン最適化（選択肢） ========== */
-    .optimizer { background: linear-gradient(180deg, var(--white) 0%, var(--gold-bg) 100%); border-radius: 24px; padding: 2.5rem; box-shadow: var(--shadow); }
-    .optimizer h3 { font-size: 1.1rem; color: var(--gold); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
-    .choice-group { margin-bottom: 2rem; }
-    .choice-group label { display: block; font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--ink); }
-    .choices {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-top: 0.5rem;
+    /* ===== Optimizer ===== */
+    .optimizer {
+      background: linear-gradient(170deg, var(--white) 0%, #fdf6ee 100%);
+      border-radius: 24px;
+      padding: 2.5rem;
+      box-shadow: var(--shadow);
     }
+
+    /* Progress indicator */
+    .progress-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      margin-bottom: 2.2rem;
+    }
+    .pdot {
+      width: 11px; height: 11px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: background 0.4s ease, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+    }
+    .pdot.done {
+      background: var(--gold);
+      transform: scale(1.35);
+      box-shadow: 0 0 0 3px rgba(166,124,82,0.22);
+    }
+    .pline {
+      width: 36px; height: 2px;
+      background: var(--border);
+      border-radius: 1px;
+      position: relative;
+      overflow: hidden;
+    }
+    .pline::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease 0.1s;
+    }
+    .pline.done::after { transform: scaleX(1); }
+    .progress-count {
+      font-size: 0.78rem;
+      color: var(--gold);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      margin-left: 0.3rem;
+    }
+
+    /* Choice group */
+    .choice-group { margin-bottom: 2.2rem; }
+    .choice-group h3 {
+      font-size: 1.05rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .choice-group.answered h3 { color: #6b5540; }
+    .choice-group.answered h3::after {
+      content: '✓';
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px; height: 20px;
+      background: var(--gold);
+      color: #fff;
+      border-radius: 50%;
+      font-size: 0.68rem;
+      font-weight: 700;
+      animation: checkPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    @keyframes checkPop {
+      from { transform: scale(0) rotate(-180deg); opacity: 0; }
+      to   { transform: scale(1) rotate(0); opacity: 1; }
+    }
+    .choices { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem; }
+
+    /* Choice card */
     .choice-card {
       flex: 1 1 140px;
       min-width: 120px;
-      padding: 1rem;
+      padding: 1.05rem 0.75rem;
       border: 2px solid var(--border);
-      border-radius: 12px;
+      border-radius: 14px;
       cursor: pointer;
-      transition: all 0.25s ease;
+      transition:
+        border-color 0.2s,
+        background 0.25s,
+        opacity 0.3s,
+        transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.25s;
       text-align: center;
       background: var(--white);
+      position: relative;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
     }
-    .choice-card:hover { border-color: var(--gold-light); background: var(--gold-bg); }
-    .choice-card.selected { border-color: var(--gold); background: var(--gold-bg); box-shadow: 0 0 0 1px var(--gold); }
+    .choice-card:hover {
+      border-color: var(--gold-light);
+      background: var(--gold-bg);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(166,124,82,0.13);
+    }
+    .choice-card.selected {
+      border-color: var(--gold);
+      background: var(--gold);
+      transform: scale(1.05);
+      box-shadow: 0 8px 28px rgba(166,124,82,0.38);
+    }
+    .choice-card.selected .c-label { color: rgba(255,255,255,0.95); font-weight: 600; }
+    .choice-card.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 6px; right: 9px;
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.9);
+      font-weight: 700;
+      animation: checkPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    .choices.has-sel .choice-card:not(.selected) {
+      opacity: 0.5;
+      transform: scale(0.96);
+    }
+    .choices.has-sel .choice-card:not(.selected):hover {
+      opacity: 0.82;
+      transform: scale(1.0) translateY(-2px);
+    }
     .choice-card input { display: none; }
-    .choice-card .icon { font-size: 1.5rem; margin-bottom: 0.35rem; }
-    .choice-card .label { font-size: 0.9rem; font-weight: 500; color: var(--ink); }
+    .choice-card .c-icon {
+      font-size: 1.65rem;
+      margin-bottom: 0.4rem;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .choice-card:hover .c-icon { transform: scale(1.25) rotate(6deg); }
+    .choice-card.selected .c-icon {
+      animation: iconBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    @keyframes iconBounce {
+      0%   { transform: scale(0.6) rotate(-12deg); }
+      100% { transform: scale(1.15); }
+    }
+    .choice-card .c-label { font-size: 0.88rem; font-weight: 500; color: var(--ink); }
+
+    /* Ripple */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      transform: scale(0);
+      animation: rippleAnim 0.65s linear;
+      pointer-events: none;
+    }
+    @keyframes rippleAnim { to { transform: scale(4.5); opacity: 0; } }
+
+    /* Result banner */
     .result-banner {
-      margin-top: 1.5rem;
-      padding: 1.25rem 1.5rem;
-      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      margin-top: 1.75rem;
+      padding: 1.8rem 1.5rem 1.4rem;
+      background: linear-gradient(135deg, #7a4f2d 0%, var(--gold) 50%, #d4a96a 100%);
       color: var(--white);
-      border-radius: 12px;
+      border-radius: 18px;
       text-align: center;
       font-weight: 500;
       display: none;
+      overflow: hidden;
+      position: relative;
     }
-    .result-banner.visible { display: block; animation: fadeIn 0.5s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-    .result-banner .plan-name { font-size: 1.15rem; margin-bottom: 0.25rem; }
-    .result-banner .plan-desc { font-size: 0.9rem; opacity: 0.95; }
+    .result-banner.visible {
+      display: block;
+      animation: bannerReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    @keyframes bannerReveal {
+      from { opacity: 0; transform: scale(0.82) translateY(16px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .result-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(105deg, transparent 25%, rgba(255,255,255,0.22) 50%, transparent 75%);
+      transform: translateX(-150%);
+      animation: shimmer 2.4s ease 0.8s infinite;
+    }
+    @keyframes shimmer {
+      from { transform: translateX(-150%); }
+      to   { transform: translateX(200%); }
+    }
+    .sparkle {
+      position: absolute;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.85);
+      pointer-events: none;
+      animation: sparkleFly 1.4s ease-out both;
+    }
+    @keyframes sparkleFly {
+      0%   { transform: scale(0) translate(0,0); opacity: 1; }
+      100% { transform: scale(1.5) translate(var(--tx), var(--ty)); opacity: 0; }
+    }
+    .banner-eyebrow {
+      font-size: 0.76rem;
+      letter-spacing: 0.22em;
+      opacity: 0.84;
+      text-transform: uppercase;
+      margin-bottom: 0.45rem;
+    }
+    .banner-name { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .banner-desc { font-size: 0.88rem; opacity: 0.92; }
+    .banner-cats { margin-top: 0.9rem; font-size: 1.1rem; opacity: 0.82; }
 
-    /* ========== プランカード（並び替え対応） ========== */
+    /* ===== Plan blocks ===== */
     #plan-list { margin-top: 2rem; }
     .plan-block {
       background: var(--white);
@@ -145,63 +430,133 @@
       margin-bottom: 2rem;
       box-shadow: var(--shadow);
       border: 2px solid transparent;
-      transition: all 0.35s ease;
+      transition: border-color 0.45s ease, box-shadow 0.45s ease;
+      will-change: transform;
     }
-    .plan-block.recommended { border-color: var(--gold); box-shadow: var(--shadow-strong); }
-    .plan-block .plan-img { width: 100%; height: 220px; object-fit: cover; }
+    .plan-block.recommended {
+      border-color: var(--gold);
+      box-shadow: 0 18px 52px rgba(166,124,82,0.22);
+    }
+    .plan-block .plan-img { width: 100%; height: 220px; object-fit: cover; transition: transform 0.6s ease; display: block; }
+    .plan-block:hover .plan-img { transform: scale(1.04); }
     .plan-block .plan-body { padding: 1.75rem 2rem; }
     .plan-block .plan-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
-    .plan-block .plan-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--gold); font-weight: 600; }
+    .plan-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--gold); font-weight: 600; }
     .badge {
       display: inline-block;
-      padding: 0.25rem 0.75rem;
-      background: var(--gold);
+      padding: 0.28rem 0.85rem;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
       color: var(--white);
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       border-radius: 999px;
       letter-spacing: 0.05em;
+      box-shadow: 0 3px 12px rgba(166,124,82,0.4);
+      animation: badgePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    @keyframes badgePop {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
     }
     .plan-card { background: var(--gold-bg); border-radius: 12px; padding: 1.25rem 1.5rem; margin: 1rem 0; }
     .plan-card h4 { font-size: 0.95rem; color: var(--gold); margin-bottom: 0.6rem; }
     .plan-block ul { list-style: none; }
     .plan-block li { padding-left: 1rem; position: relative; margin-bottom: 0.4rem; font-size: 0.95rem; }
     .plan-block li::before { content: '・'; position: absolute; left: 0; color: var(--gold-light); }
-    .plan-block .point { margin-top: 1rem; font-size: 0.9rem; color: var(--ink); opacity: 0.9; }
+    .plan-block .point { margin-top: 1rem; font-size: 0.9rem; opacity: 0.9; }
     .plan-block .point strong { color: var(--gold); }
 
-    /* ========== チェックリスト ========== */
+    /* ===== Checklist ===== */
     .checklist { background: var(--gold-bg); border-radius: 20px; padding: 2rem; }
     .checklist ul { list-style: none; }
     .checklist li { padding: 0.6rem 0 0.6rem 2rem; position: relative; font-size: 0.95rem; }
     .checklist li::before { content: '✓'; position: absolute; left: 0; color: var(--gold); font-weight: 700; }
-    .closing { text-align: center; margin-top: 3rem; font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--gold); }
-    .closing-signature { text-align: center; margin-top: 0.75rem; font-size: 0.95rem; color: var(--gold-light); letter-spacing: 0.1em; }
 
-    /* ========== ナビヒント ========== */
+    /* Closing photo grid */
+    .closing-photos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
+      margin: 2.5rem 0;
+    }
+    @media (max-width: 480px) { .closing-photos { grid-template-columns: repeat(2, 1fr); } }
+    .cp-item {
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      aspect-ratio: 1;
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+    .cp-item:hover { transform: scale(1.04) rotate(1.2deg); box-shadow: var(--shadow-strong); }
+    .cp-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .closing { text-align: center; margin-top: 3rem; font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--gold); }
+    .closing-signature { text-align: center; margin-top: 0.75rem; font-size: 0.95rem; color: var(--gold-light); letter-spacing: 0.12em; }
+
+    /* Nav hint */
     .nav-hint {
       position: fixed;
       bottom: 1.5rem;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--gold-light);
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       z-index: 10;
+      animation: floatHint 2.2s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes floatHint {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(-6px); }
     }
   </style>
 </head>
 <body>
 
+  <!-- ヒーロー -->
   <header class="hero">
     <div class="hero-bg"></div>
     <div class="hero-inner">
       <h1>旅のしおり</h1>
       <p class="sub">萌々子の誕生日</p>
       <p class="date">2月20日（金）夜 〜 2月21日（土）</p>
+      <div class="hero-family">
+        <span>🐱 ロイ</span>
+        <span>🐱 きぬ</span>
+        <span>🎀 留樹 より</span>
+      </div>
     </div>
   </header>
 
-  <section id="fixed">
+  <!-- 家族フォトギャラリー（自動スクロール） -->
+  <div id="family-gallery" class="reveal">
+    <p class="gallery-label">ロイ・きぬもお留守番よろしくね 🐱</p>
+    <div class="photo-track-wrap">
+      <div class="photo-track">
+        <!-- 1セット目 -->
+        <div class="photo-item"><img src="ロイきぬ/IMG_4236.jpg" alt="ロイ・きぬ"><div class="pcap">ロイ ＆ きぬ</div></div>
+        <div class="photo-item"><img src="ロイきぬ/IMG_3673.jpg" alt="ロイ"><div class="pcap">ロイ、くつろぎ中</div></div>
+        <div class="photo-item"><img src="ロイきぬ/IMG_4166.JPG" alt="ロイ"><div class="pcap">きりっとロイ</div></div>
+        <div class="photo-item"><img src="ロイきぬ/IMG_4215.JPG" alt="家族"><div class="pcap">仲良し家族</div></div>
+        <div class="photo-item"><img src="ロイきぬ/IMG_4310.jpg" alt="きぬ"><div class="pcap">きぬ、見張り中</div></div>
+        <div class="photo-item"><img src="ロイきぬ/IMG_4364.jpg" alt="きぬ"><div class="pcap">きぬ、待機中</div></div>
+        <div class="photo-item"><img src="ロイきぬ/IMG_4379.JPG" alt=""><div class="pcap">おめかし中</div></div>
+        <div class="photo-item"><img src="ロイきぬ/IMG_4395.JPG" alt=""><div class="pcap">たのしかったね</div></div>
+        <!-- 2セット目（無限ループ） -->
+        <div class="photo-item"><img src="ロイきぬ/IMG_4236.jpg" alt="ロイ・きぬ"><div class="pcap">ロイ ＆ きぬ</div></div>
+        <div class="photo-item"><img src="ロイきぬ/IMG_3673.jpg" alt="ロイ"><div class="pcap">ロイ、くつろぎ中</div></div>
+        <div class="photo-item"><img src="ロイきぬ/IMG_4166.JPG" alt="ロイ"><div class="pcap">きりっとロイ</div></div>
+        <div class="photo-item"><img src="ロイきぬ/IMG_4215.JPG" alt="家族"><div class="pcap">仲良し家族</div></div>
+        <div class="photo-item"><img src="ロイきぬ/IMG_4310.jpg" alt="きぬ"><div class="pcap">きぬ、見張り中</div></div>
+        <div class="photo-item"><img src="ロイきぬ/IMG_4364.jpg" alt="きぬ"><div class="pcap">きぬ、待機中</div></div>
+        <div class="photo-item"><img src="ロイきぬ/IMG_4379.JPG" alt=""><div class="pcap">おめかし中</div></div>
+        <div class="photo-item"><img src="ロイきぬ/IMG_4395.JPG" alt=""><div class="pcap">たのしかったね</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 決まっている予定 -->
+  <section id="fixed" class="reveal">
     <h2 class="section-title">決まっている予定</h2>
     <p class="section-intro">土曜のメイン予定はこちら。金曜夜と土曜の過ごし方で、最適なプランを一緒に選びましょう。</p>
     <div class="img-grid">
@@ -226,127 +581,131 @@
     </div>
   </section>
 
-  <section id="optimizer-section">
+  <!-- プラン最適化 -->
+  <section id="optimizer-section" class="reveal">
     <h2 class="section-title">あなたの希望を選んでください</h2>
     <p class="section-intro">下の選択肢を選ぶと、ぴったりのプランがおすすめ表示されます。</p>
     <div class="optimizer">
-      <div class="choice-group">
+
+      <!-- プログレス -->
+      <div class="progress-row">
+        <div class="pdot" id="pdot-0"></div>
+        <div class="pline" id="pline-0"></div>
+        <div class="pdot" id="pdot-1"></div>
+        <div class="pline" id="pline-1"></div>
+        <div class="pdot" id="pdot-2"></div>
+        <div class="pline" id="pline-2"></div>
+        <div class="pdot" id="pdot-3"></div>
+        <span class="progress-count" id="progress-count">0 / 4</span>
+      </div>
+
+      <div class="choice-group" id="cg-friday">
         <h3>金曜の夜はどう過ごしたい？</h3>
         <div class="choices" data-q="friday">
           <label class="choice-card" data-value="relax">
             <input type="radio" name="friday" value="relax">
-            <span class="icon">🏠</span>
-            <span class="label">ゆったり自宅・近場</span>
+            <span class="c-icon">🏠</span><span class="c-label">ゆったり自宅・近場</span>
           </label>
           <label class="choice-card" data-value="go_out">
             <input type="radio" name="friday" value="go_out">
-            <span class="icon">🍸</span>
-            <span class="label">バー・ラウンジで非日常</span>
+            <span class="c-icon">🍸</span><span class="c-label">バー・ラウンジで非日常</span>
           </label>
           <label class="choice-card" data-value="movie">
             <input type="radio" name="friday" value="movie">
-            <span class="icon">🎬</span>
-            <span class="label">映画・イベント</span>
+            <span class="c-icon">🎬</span><span class="c-label">映画・イベント</span>
           </label>
           <label class="choice-card" data-value="sweets">
             <input type="radio" name="friday" value="sweets">
-            <span class="icon">🍰</span>
-            <span class="label">スイーツ・カフェ巡り</span>
+            <span class="c-icon">🍰</span><span class="c-label">スイーツ・カフェ巡り</span>
           </label>
           <label class="choice-card" data-value="stay_late">
             <input type="radio" name="friday" value="stay_late">
-            <span class="icon">🌃</span>
-            <span class="label">夜更かし・ナイトライフ</span>
+            <span class="c-icon">🌃</span><span class="c-label">夜更かし・ナイトライフ</span>
           </label>
         </div>
       </div>
-      <div class="choice-group">
+
+      <div class="choice-group" id="cg-saturday">
         <h3>土曜は何を重視したい？</h3>
         <div class="choices" data-q="saturday">
           <label class="choice-card" data-value="shopping">
             <input type="radio" name="saturday" value="shopping">
-            <span class="icon">🛍️</span>
-            <span class="label">買い物をたっぷり</span>
+            <span class="c-icon">🛍️</span><span class="c-label">買い物をたっぷり</span>
           </label>
           <label class="choice-card" data-value="daikanyama">
             <input type="radio" name="saturday" value="daikanyama">
-            <span class="icon">☕</span>
-            <span class="label">代官山の雰囲気</span>
+            <span class="c-icon">☕</span><span class="c-label">代官山の雰囲気</span>
           </label>
           <label class="choice-card" data-value="balance">
             <input type="radio" name="saturday" value="balance">
-            <span class="icon">⚖️</span>
-            <span class="label">バランスよく</span>
+            <span class="c-icon">⚖️</span><span class="c-label">バランスよく</span>
           </label>
           <label class="choice-card" data-value="photo">
             <input type="radio" name="saturday" value="photo">
-            <span class="icon">📷</span>
-            <span class="label">フォトスポット・映え</span>
+            <span class="c-icon">📷</span><span class="c-label">フォトスポット・映え</span>
           </label>
           <label class="choice-card" data-value="gourmet">
             <input type="radio" name="saturday" value="gourmet">
-            <span class="icon">🍽️</span>
-            <span class="label">ランチも含めて食を楽しむ</span>
+            <span class="c-icon">🍽️</span><span class="c-label">ランチも含めて食を楽しむ</span>
           </label>
         </div>
       </div>
-      <div class="choice-group">
+
+      <div class="choice-group" id="cg-pace">
         <h3>ペースはどれがいい？</h3>
         <div class="choices" data-q="pace">
           <label class="choice-card" data-value="easy">
             <input type="radio" name="pace" value="easy">
-            <span class="icon">🌙</span>
-            <span class="label">ゆったり</span>
+            <span class="c-icon">🌙</span><span class="c-label">ゆったり</span>
           </label>
           <label class="choice-card" data-value="medium">
             <input type="radio" name="pace" value="medium">
-            <span class="icon">🍂</span>
-            <span class="label">ほどほど</span>
+            <span class="c-icon">🍂</span><span class="c-label">ほどほど</span>
           </label>
           <label class="choice-card" data-value="full">
             <input type="radio" name="pace" value="full">
-            <span class="icon">✨</span>
-            <span class="label">しっかり楽しむ</span>
+            <span class="c-icon">✨</span><span class="c-label">しっかり楽しむ</span>
           </label>
         </div>
       </div>
-      <div class="choice-group">
+
+      <div class="choice-group" id="cg-vibe">
         <h3>どんな特別感を味わいたい？</h3>
         <div class="choices" data-q="vibe">
           <label class="choice-card" data-value="classic">
             <input type="radio" name="vibe" value="classic">
-            <span class="icon">💐</span>
-            <span class="label">王道・定番の特別感</span>
+            <span class="c-icon">💐</span><span class="c-label">王道・定番の特別感</span>
           </label>
           <label class="choice-card" data-value="photo_friendly">
             <input type="radio" name="vibe" value="photo_friendly">
-            <span class="icon">✨</span>
-            <span class="label">フォト映え・思い出に残る</span>
+            <span class="c-icon">✨</span><span class="c-label">フォト映え・思い出に残る</span>
           </label>
           <label class="choice-card" data-value="gourmet">
             <input type="radio" name="vibe" value="gourmet">
-            <span class="icon">🍷</span>
-            <span class="label">食をとことん楽しむ</span>
+            <span class="c-icon">🍷</span><span class="c-label">食をとことん楽しむ</span>
           </label>
           <label class="choice-card" data-value="non_daily">
             <input type="radio" name="vibe" value="non_daily">
-            <span class="icon">🌟</span>
-            <span class="label">非日常・ちょっと冒険</span>
+            <span class="c-icon">🌟</span><span class="c-label">非日常・ちょっと冒険</span>
           </label>
         </div>
       </div>
+
       <div class="result-banner" id="result-banner">
-        <div class="plan-name" id="result-plan-name"></div>
-        <div class="plan-desc" id="result-plan-desc"></div>
+        <div class="banner-eyebrow">✦ あなたにおすすめ ✦</div>
+        <div class="banner-name" id="result-plan-name"></div>
+        <div class="banner-desc" id="result-plan-desc"></div>
+        <div class="banner-cats">🐱 ロイ・きぬも応援してるよ 🐱</div>
       </div>
     </div>
   </section>
 
-  <section id="plans">
+  <!-- プラン一覧 -->
+  <section id="plans" class="reveal">
     <h2 class="section-title">プラン一覧</h2>
     <p class="section-intro">選択した希望に合わせて、おすすめのプランが上に表示されます。</p>
     <div id="plan-list">
-      <!-- JSで並び替え -->
+
       <div class="plan-block" data-plan="A">
         <img class="plan-img" src="https://images.unsplash.com/photo-1557925923-cd4648e211a0?w=800&q=80" alt="プランA">
         <div class="plan-body">
@@ -354,20 +713,14 @@
             <span class="plan-title">プランA：金曜はゆったり、土曜は渋谷集中</span>
             <span class="badge recommended-badge" style="display:none;">あなたにおすすめ</span>
           </div>
-          <div class="plan-card">
-            <h4>金曜夜</h4>
-            <ul>
-              <li>自宅または近場で誕生日前夜のディナー（手作り or お気に入り店）</li>
-              <li>翌日に備えて早めに就寝</li>
-            </ul>
-          </div>
-          <div class="plan-card">
-            <h4>土曜</h4>
-            <ul>
-              <li>午前：渋谷で買い物（スクランブル周辺・マークシティ等）</li>
-              <li>午後：カフェで休憩 → 代官山へ移動し、19時セルサルサーレへ</li>
-            </ul>
-          </div>
+          <div class="plan-card"><h4>金曜夜</h4><ul>
+            <li>自宅または近場で誕生日前夜のディナー（手作り or お気に入り店）</li>
+            <li>翌日に備えて早めに就寝</li>
+          </ul></div>
+          <div class="plan-card"><h4>土曜</h4><ul>
+            <li>午前：渋谷で買い物（スクランブル周辺・マークシティ等）</li>
+            <li>午後：カフェで休憩 → 代官山へ移動し、19時セルサルサーレへ</li>
+          </ul></div>
           <p class="point"><strong>おすすめポイント：</strong>無理のないペースで、買い物と食事を楽しめる。</p>
         </div>
       </div>
@@ -379,21 +732,15 @@
             <span class="plan-title">プランB：金曜から非日常気分</span>
             <span class="badge recommended-badge" style="display:none;">あなたにおすすめ</span>
           </div>
-          <div class="plan-card">
-            <h4>金曜夜</h4>
-            <ul>
-              <li>都内のバーやラウンジで前夜祭（夜景の見えるスポットなど）</li>
-              <li>ホテルのバーや高層ビルのラウンジで乾杯</li>
-            </ul>
-          </div>
-          <div class="plan-card">
-            <h4>土曜</h4>
-            <ul>
-              <li>午前〜昼：渋谷で買い物</li>
-              <li>15時頃：代官山に移動し、カフェや雑貨店でぶらり</li>
-              <li>19時：セルサルサーレ（代官山）</li>
-            </ul>
-          </div>
+          <div class="plan-card"><h4>金曜夜</h4><ul>
+            <li>都内のバーやラウンジで前夜祭（夜景の見えるスポットなど）</li>
+            <li>ホテルのバーや高層ビルのラウンジで乾杯</li>
+          </ul></div>
+          <div class="plan-card"><h4>土曜</h4><ul>
+            <li>午前〜昼：渋谷で買い物</li>
+            <li>15時頃：代官山に移動し、カフェや雑貨店でぶらり</li>
+            <li>19時：セルサルサーレ（代官山）</li>
+          </ul></div>
           <p class="point"><strong>おすすめポイント：</strong>前日から特別感を出したい方に。代官山で午後を過ごすと夜の予定にスムーズ。</p>
         </div>
       </div>
@@ -405,21 +752,15 @@
             <span class="plan-title">プランC：金曜は映画・イベント、土曜は買い物メイン</span>
             <span class="badge recommended-badge" style="display:none;">あなたにおすすめ</span>
           </div>
-          <div class="plan-card">
-            <h4>金曜夜</h4>
-            <ul>
-              <li>映画館で最新作や萌々子の好きなジャンルの映画</li>
-              <li>上映後に軽く食事やスイーツ</li>
-            </ul>
-          </div>
-          <div class="plan-card">
-            <h4>土曜</h4>
-            <ul>
-              <li>渋谷で買い物（百貨店・雑貨・アパレルなど）</li>
-              <li>午後は代官山へ。レストラン前にフォトスポットやカフェでひと休み</li>
-              <li>19時：セルサルサーレ（代官山）</li>
-            </ul>
-          </div>
+          <div class="plan-card"><h4>金曜夜</h4><ul>
+            <li>映画館で最新作や萌々子の好きなジャンルの映画</li>
+            <li>上映後に軽く食事やスイーツ</li>
+          </ul></div>
+          <div class="plan-card"><h4>土曜</h4><ul>
+            <li>渋谷で買い物（百貨店・雑貨・アパレルなど）</li>
+            <li>午後は代官山へ。レストラン前にフォトスポットやカフェでひと休み</li>
+            <li>19時：セルサルサーレ（代官山）</li>
+          </ul></div>
           <p class="point"><strong>おすすめポイント：</strong>映画好きなら金曜の夜が特別な思い出に。土曜は買い物に集中。</p>
         </div>
       </div>
@@ -431,20 +772,14 @@
             <span class="plan-title">プランD：代官山を丸一日楽しむ</span>
             <span class="badge recommended-badge" style="display:none;">あなたにおすすめ</span>
           </div>
-          <div class="plan-card">
-            <h4>金曜夜</h4>
-            <ul>
-              <li>自宅でケーキとシャンパン（またはノンアル）で前夜祝い</li>
-            </ul>
-          </div>
-          <div class="plan-card">
-            <h4>土曜</h4>
-            <ul>
-              <li>午前：渋谷で買い物（午前中で切り上げ）</li>
-              <li>昼過ぎ：代官山へ。カフェ・雑貨・ブックショップ・洋服などで散策</li>
-              <li>19時：セルサルサーレ（代官山）</li>
-            </ul>
-          </div>
+          <div class="plan-card"><h4>金曜夜</h4><ul>
+            <li>自宅でケーキとシャンパン（またはノンアル）で前夜祝い</li>
+          </ul></div>
+          <div class="plan-card"><h4>土曜</h4><ul>
+            <li>午前：渋谷で買い物（午前中で切り上げ）</li>
+            <li>昼過ぎ：代官山へ。カフェ・雑貨・ブックショップ・洋服などで散策</li>
+            <li>19時：セルサルサーレ（代官山）</li>
+          </ul></div>
           <p class="point"><strong>おすすめポイント：</strong>代官山の雰囲気をたっぷり味わいたい方に。移動も少なく効率的。</p>
         </div>
       </div>
@@ -456,21 +791,15 @@
             <span class="plan-title">プランE：金曜はスイーツ巡り、土曜はフォト映え</span>
             <span class="badge recommended-badge" style="display:none;">あなたにおすすめ</span>
           </div>
-          <div class="plan-card">
-            <h4>金曜夜</h4>
-            <ul>
-              <li>都内のスイーツやカフェを2〜3店はしご（代官山・恵比寿・渋谷など）</li>
-              <li>フォトジェニックなケーキで前夜祝い</li>
-            </ul>
-          </div>
-          <div class="plan-card">
-            <h4>土曜</h4>
-            <ul>
-              <li>午前：渋谷で買い物</li>
-              <li>午後：代官山へ。フォトスポットや映えカフェで撮影しながら散策</li>
-              <li>19時：セルサルサーレ（代官山）</li>
-            </ul>
-          </div>
+          <div class="plan-card"><h4>金曜夜</h4><ul>
+            <li>都内のスイーツやカフェを2〜3店はしご（代官山・恵比寿・渋谷など）</li>
+            <li>フォトジェニックなケーキで前夜祝い</li>
+          </ul></div>
+          <div class="plan-card"><h4>土曜</h4><ul>
+            <li>午前：渋谷で買い物</li>
+            <li>午後：代官山へ。フォトスポットや映えカフェで撮影しながら散策</li>
+            <li>19時：セルサルサーレ（代官山）</li>
+          </ul></div>
           <p class="point"><strong>おすすめポイント：</strong>写真に残る思い出をたくさん作りたい方に。金曜から映えを意識したルートで。</p>
         </div>
       </div>
@@ -482,21 +811,15 @@
             <span class="plan-title">プランF：金曜は夜更かし、土曜は食を堪能</span>
             <span class="badge recommended-badge" style="display:none;">あなたにおすすめ</span>
           </div>
-          <div class="plan-card">
-            <h4>金曜夜</h4>
-            <ul>
-              <li>都内のバーやナイトスポットで夜更かし（夜景ラウンジ・ライブバーなど）</li>
-              <li>翌日は少し遅めスタートでリフレッシュ</li>
-            </ul>
-          </div>
-          <div class="plan-card">
-            <h4>土曜</h4>
-            <ul>
-              <li>遅めのブランチ or 渋谷でランチをゆっくり</li>
-              <li>買い物の合間にスイーツやドリンクで休憩</li>
-              <li>19時：セルサルサーレ（代官山）でメインのディナー</li>
-            </ul>
-          </div>
+          <div class="plan-card"><h4>金曜夜</h4><ul>
+            <li>都内のバーやナイトスポットで夜更かし（夜景ラウンジ・ライブバーなど）</li>
+            <li>翌日は少し遅めスタートでリフレッシュ</li>
+          </ul></div>
+          <div class="plan-card"><h4>土曜</h4><ul>
+            <li>遅めのブランチ or 渋谷でランチをゆっくり</li>
+            <li>買い物の合間にスイーツやドリンクで休憩</li>
+            <li>19時：セルサルサーレ（代官山）でメインのディナー</li>
+          </ul></div>
           <p class="point"><strong>おすすめポイント：</strong>食を軸に一日楽しみたい方に。金曜の夜も土曜のランチもディナーも満喫。</p>
         </div>
       </div>
@@ -508,28 +831,24 @@
             <span class="plan-title">プランG：ほどほどに、いろいろ楽しむ</span>
             <span class="badge recommended-badge" style="display:none;">あなたにおすすめ</span>
           </div>
-          <div class="plan-card">
-            <h4>金曜夜</h4>
-            <ul>
-              <li>自宅でケーキや軽い食事、または近場のカフェで一息</li>
-              <li>無理せず翌日に備える</li>
-            </ul>
-          </div>
-          <div class="plan-card">
-            <h4>土曜</h4>
-            <ul>
-              <li>渋谷で買い物＋代官山散策をほどほどに</li>
-              <li>詰め込みすぎず、カフェ休憩やフォトタイムも挟む</li>
-              <li>19時：セルサルサーレ（代官山）</li>
-            </ul>
-          </div>
+          <div class="plan-card"><h4>金曜夜</h4><ul>
+            <li>自宅でケーキや軽い食事、または近場のカフェで一息</li>
+            <li>無理せず翌日に備える</li>
+          </ul></div>
+          <div class="plan-card"><h4>土曜</h4><ul>
+            <li>渋谷で買い物＋代官山散策をほどほどに</li>
+            <li>詰め込みすぎず、カフェ休憩やフォトタイムも挟む</li>
+            <li>19時：セルサルサーレ（代官山）</li>
+          </ul></div>
           <p class="point"><strong>おすすめポイント：</strong>「全部やる」より「無理なく楽しむ」派に。バランス型で疲れにくい。</p>
         </div>
       </div>
+
     </div>
   </section>
 
-  <section id="checklist">
+  <!-- チェックリスト -->
+  <section id="checklist" class="reveal">
     <h2 class="section-title">チェックリスト・メモ</h2>
     <div class="img-block">
       <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=1200&q=80" alt="東京">
@@ -544,6 +863,11 @@
         <li>誕生日プレゼントの用意</li>
       </ul>
     </div>
+    <div class="closing-photos">
+      <div class="cp-item"><img src="ロイきぬ/IMG_4379.JPG" alt=""></div>
+      <div class="cp-item"><img src="ロイきぬ/IMG_4215.JPG" alt=""></div>
+      <div class="cp-item"><img src="ロイきぬ/IMG_4395.JPG" alt=""></div>
+    </div>
     <p class="closing">— 萌々子、素敵な誕生日になりますように —</p>
     <p class="closing-signature">留樹</p>
   </section>
@@ -551,130 +875,202 @@
   <p class="nav-hint">↓ スクロールで続きを読む</p>
 
   <script>
-(function() {
+(function () {
+  /* ===== スクロール Reveal ===== */
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.reveal').forEach(function (el) { observer.observe(el); });
+
+  /* ===== Optimizer data ===== */
   var planIds = ['A','B','C','D','E','F','G'];
-  // 選択肢 → プラン得点
   var scores = {
     friday: {
-      relax:    { A: 2, B: 0, C: 0, D: 2, E: 0, F: 0, G: 1 },
-      go_out:   { A: 0, B: 2, C: 0, D: 0, E: 0, F: 0, G: 0 },
-      movie:    { A: 0, B: 0, C: 2, D: 0, E: 0, F: 0, G: 0 },
-      sweets:   { A: 0, B: 0, C: 0, D: 0, E: 2, F: 0, G: 0 },
-      stay_late:{ A: 0, B: 0, C: 0, D: 0, E: 0, F: 2, G: 0 }
+      relax:    { A:2, B:0, C:0, D:2, E:0, F:0, G:1 },
+      go_out:   { A:0, B:2, C:0, D:0, E:0, F:0, G:0 },
+      movie:    { A:0, B:0, C:2, D:0, E:0, F:0, G:0 },
+      sweets:   { A:0, B:0, C:0, D:0, E:2, F:0, G:0 },
+      stay_late:{ A:0, B:0, C:0, D:0, E:0, F:2, G:0 }
     },
     saturday: {
-      shopping:   { A: 2, B: 0, C: 2, D: 0, E: 0, F: 0, G: 1 },
-      daikanyama: { A: 0, B: 2, C: 0, D: 2, E: 0, F: 0, G: 0 },
-      balance:    { A: 1, B: 1, C: 1, D: 1, E: 0, F: 0, G: 2 },
-      photo:      { A: 0, B: 0, C: 0, D: 0, E: 2, F: 0, G: 1 },
-      gourmet:    { A: 0, B: 0, C: 0, D: 0, E: 0, F: 2, G: 0 }
+      shopping:   { A:2, B:0, C:2, D:0, E:0, F:0, G:1 },
+      daikanyama: { A:0, B:2, C:0, D:2, E:0, F:0, G:0 },
+      balance:    { A:1, B:1, C:1, D:1, E:0, F:0, G:2 },
+      photo:      { A:0, B:0, C:0, D:0, E:2, F:0, G:1 },
+      gourmet:    { A:0, B:0, C:0, D:0, E:0, F:2, G:0 }
     },
     pace: {
-      easy:   { A: 2, B: 0, C: 0, D: 2, E: 0, F: 0, G: 0 },
-      medium: { A: 0, B: 0, C: 0, D: 0, E: 2, F: 0, G: 2 },
-      full:   { A: 0, B: 2, C: 2, D: 0, E: 0, F: 1, G: 0 }
+      easy:   { A:2, B:0, C:0, D:2, E:0, F:0, G:0 },
+      medium: { A:0, B:0, C:0, D:0, E:2, F:0, G:2 },
+      full:   { A:0, B:2, C:2, D:0, E:0, F:1, G:0 }
     },
     vibe: {
-      classic:       { A: 1, B: 0, C: 0, D: 0, E: 0, F: 0, G: 2 },
-      photo_friendly:{ A: 0, B: 0, C: 0, D: 0, E: 2, F: 0, G: 0 },
-      gourmet:       { A: 0, B: 0, C: 0, D: 0, E: 0, F: 2, G: 0 },
-      non_daily:     { A: 0, B: 2, C: 0, D: 0, E: 0, F: 0, G: 0 }
+      classic:       { A:1, B:0, C:0, D:0, E:0, F:0, G:2 },
+      photo_friendly:{ A:0, B:0, C:0, D:0, E:2, F:0, G:0 },
+      gourmet:       { A:0, B:0, C:0, D:0, E:0, F:2, G:0 },
+      non_daily:     { A:0, B:2, C:0, D:0, E:0, F:0, G:0 }
     }
   };
-
   var planNames = {
-    A: 'プランA：金曜はゆったり、土曜は渋谷集中',
-    B: 'プランB：金曜から非日常気分',
-    C: 'プランC：金曜は映画・イベント、土曜は買い物メイン',
-    D: 'プランD：代官山を丸一日楽しむ',
-    E: 'プランE：金曜はスイーツ巡り、土曜はフォト映え',
-    F: 'プランF：金曜は夜更かし、土曜は食を堪能',
-    G: 'プランG：ほどほどに、いろいろ楽しむ'
+    A:'プランA：金曜はゆったり、土曜は渋谷集中',
+    B:'プランB：金曜から非日常気分',
+    C:'プランC：金曜は映画・イベント、土曜は買い物メイン',
+    D:'プランD：代官山を丸一日楽しむ',
+    E:'プランE：金曜はスイーツ巡り、土曜はフォト映え',
+    F:'プランF：金曜は夜更かし、土曜は食を堪能',
+    G:'プランG：ほどほどに、いろいろ楽しむ'
   };
   var planDescs = {
-    A: 'ゆったりペースで、買い物と食事を楽しむプランです。',
-    B: '前日から非日常で、代官山の午後も満喫するプランです。',
-    C: '金曜は映画で思い出づくり、土曜は買い物メインのプランです。',
-    D: '代官山の雰囲気をたっぷり味わう、効率的なプランです。',
-    E: '写真に残る思い出をたくさん作る、映え重視のプランです。',
-    F: '食を軸に金曜夜から土曜ディナーまで堪能するプランです。',
-    G: '無理なくバランスよく楽しむ、ほどほど派向けのプランです。'
+    A:'ゆったりペースで、買い物と食事を楽しむプランです。',
+    B:'前日から非日常で、代官山の午後も満喫するプランです。',
+    C:'金曜は映画で思い出づくり、土曜は買い物メインのプランです。',
+    D:'代官山の雰囲気をたっぷり味わう、効率的なプランです。',
+    E:'写真に残る思い出をたくさん作る、映え重視のプランです。',
+    F:'食を軸に金曜夜から土曜ディナーまで堪能するプランです。',
+    G:'無理なくバランスよく楽しむ、ほどほど派向けのプランです。'
   };
+  var qKeys = ['friday','saturday','pace','vibe'];
+  var cgMap = { friday:'cg-friday', saturday:'cg-saturday', pace:'cg-pace', vibe:'cg-vibe' };
+  var choices = { friday:null, saturday:null, pace:null, vibe:null };
 
-  var choices = { friday: null, saturday: null, pace: null, vibe: null };
-
-  var questionKeys = ['friday', 'saturday', 'pace', 'vibe'];
-
-  function getScores() {
-    var total = { A: 0, B: 0, C: 0, D: 0, E: 0, F: 0, G: 0 };
-    questionKeys.forEach(function(qKey) {
-      var qScores = scores[qKey];
-      if (!qScores) return;
-      var val = choices[qKey];
-      if (val && qScores[val]) {
-        planIds.forEach(function(p) { total[p] += qScores[val][p] || 0; });
+  function getRanked() {
+    var tot = { A:0,B:0,C:0,D:0,E:0,F:0,G:0 };
+    qKeys.forEach(function(k) {
+      var v = choices[k];
+      if (v && scores[k] && scores[k][v]) {
+        planIds.forEach(function(p) { tot[p] += scores[k][v][p] || 0; });
       }
     });
-    return total;
+    return planIds.slice().sort(function(a,b) { return tot[b]-tot[a]; });
   }
 
-  function getRankedPlans() {
-    var total = getScores();
-    return planIds.slice().sort(function(a, b) { return (total[b] || 0) - (total[a] || 0); });
+  /* Progress */
+  function updateProgress() {
+    var cnt = qKeys.filter(function(k) { return choices[k]; }).length;
+    document.getElementById('progress-count').textContent = cnt + ' / 4';
+    qKeys.forEach(function(k, i) {
+      var dot = document.getElementById('pdot-' + i);
+      choices[k] ? dot.classList.add('done') : dot.classList.remove('done');
+      if (i > 0) {
+        var line = document.getElementById('pline-' + (i-1));
+        choices[qKeys[i-1]] ? line.classList.add('done') : line.classList.remove('done');
+      }
+    });
   }
 
+  /* Sparkles */
+  function spawnSparkles(banner) {
+    for (var i = 0; i < 14; i++) {
+      (function(i) {
+        var sp = document.createElement('span');
+        sp.className = 'sparkle';
+        var ang = (i / 14) * 360;
+        var d = 45 + Math.random() * 55;
+        sp.style.cssText =
+          'left:50%;top:50%;' +
+          '--tx:' + (Math.cos(ang*Math.PI/180)*d) + 'px;' +
+          '--ty:' + (Math.sin(ang*Math.PI/180)*d) + 'px;' +
+          'animation-delay:' + (Math.random()*0.25) + 's';
+        banner.appendChild(sp);
+        setTimeout(function() { if (sp.parentNode) sp.parentNode.removeChild(sp); }, 1600);
+      })(i);
+    }
+  }
+
+  /* FLIP reorder */
   function updateUI() {
-    var ranked = getRankedPlans();
-    var allSelected = choices.friday && choices.saturday && choices.pace && choices.vibe;
+    var ranked = getRanked();
+    var allSel = qKeys.every(function(k) { return choices[k]; });
     var list = document.getElementById('plan-list');
     var blocks = [].slice.call(list.querySelectorAll('.plan-block'));
 
-    // おすすめバッジを一度外す
-    blocks.forEach(function(block) {
-      block.classList.remove('recommended');
-      var badge = block.querySelector('.recommended-badge');
+    /* FLIP step 1 – record current tops */
+    var firstY = {};
+    blocks.forEach(function(b) { firstY[b.dataset.plan] = b.getBoundingClientRect().top; });
+
+    /* Clear badges */
+    blocks.forEach(function(b) {
+      b.classList.remove('recommended');
+      var badge = b.querySelector('.recommended-badge');
       if (badge) badge.style.display = 'none';
     });
 
-    if (allSelected) {
+    /* Recommendation */
+    if (allSel) {
       var best = ranked[0];
-      var bestBlock = list.querySelector('.plan-block[data-plan="' + best + '"]');
+      var bestBlock = list.querySelector('[data-plan="'+best+'"]');
       if (bestBlock) {
         bestBlock.classList.add('recommended');
         var badge = bestBlock.querySelector('.recommended-badge');
         if (badge) badge.style.display = 'inline-block';
       }
-
       var banner = document.getElementById('result-banner');
       document.getElementById('result-plan-name').textContent = planNames[best];
       document.getElementById('result-plan-desc').textContent = planDescs[best];
-      banner.classList.add('visible');
+      if (!banner.classList.contains('visible')) {
+        banner.classList.add('visible');
+        spawnSparkles(banner);
+      }
     } else {
       document.getElementById('result-banner').classList.remove('visible');
     }
 
-    // 並び替え：ランキング順にDOMを並べ替え
-    ranked.forEach(function(plan) {
-      var block = list.querySelector('.plan-block[data-plan="' + plan + '"]');
-      if (block) list.appendChild(block);
+    /* Reorder DOM */
+    ranked.forEach(function(p) {
+      var b = list.querySelector('[data-plan="'+p+'"]');
+      if (b) list.appendChild(b);
+    });
+
+    /* FLIP step 2 – animate from old position */
+    blocks.forEach(function(b) {
+      var delta = firstY[b.dataset.plan] - b.getBoundingClientRect().top;
+      if (Math.abs(delta) > 1) {
+        b.style.transition = 'none';
+        b.style.transform = 'translateY(' + delta + 'px)';
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() {
+            b.style.transition = 'transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            b.style.transform = '';
+          });
+        });
+      }
     });
   }
 
-  function bindChoices() {
-    document.querySelectorAll('.choice-card').forEach(function(card) {
-      card.addEventListener('click', function() {
-        var q = this.closest('.choice-group').querySelector('.choices').getAttribute('data-q');
-        var value = this.getAttribute('data-value');
-        choices[q] = value;
-        document.querySelectorAll('.choices[data-q="' + q + '"] .choice-card').forEach(function(c) { c.classList.remove('selected'); });
-        this.classList.add('selected');
-        this.querySelector('input').checked = true;
-        updateUI();
-      });
-    });
+  /* Ripple */
+  function ripple(card, e) {
+    var r = card.getBoundingClientRect();
+    var sz = Math.max(r.width, r.height);
+    var el = document.createElement('span');
+    el.className = 'ripple';
+    el.style.width = el.style.height = sz + 'px';
+    el.style.left = (e.clientX - r.left - sz/2) + 'px';
+    el.style.top  = (e.clientY - r.top  - sz/2) + 'px';
+    card.appendChild(el);
+    setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 700);
   }
 
-  bindChoices();
+  /* Bind */
+  document.querySelectorAll('.choice-card').forEach(function(card) {
+    card.addEventListener('click', function(e) {
+      var choicesEl = this.closest('.choices');
+      var q = choicesEl.getAttribute('data-q');
+      ripple(this, e);
+      choices[q] = this.getAttribute('data-value');
+      choicesEl.querySelectorAll('.choice-card').forEach(function(c) { c.classList.remove('selected'); });
+      this.classList.add('selected');
+      this.querySelector('input').checked = true;
+      choicesEl.classList.add('has-sel');
+      var cg = document.getElementById(cgMap[q]);
+      if (cg) cg.classList.add('answered');
+      updateProgress();
+      updateUI();
+    });
+  });
+
+  updateProgress();
   updateUI();
 })();
   </script>
