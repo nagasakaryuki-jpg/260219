@@ -509,6 +509,166 @@
       0%, 100% { transform: translateX(-50%) translateY(0); }
       50%       { transform: translateX(-50%) translateY(-6px); }
     }
+
+    /* ===== 画面フラッシュ ===== */
+    .screen-flash {
+      position: fixed; inset: 0;
+      z-index: 9990; pointer-events: none;
+      animation: flashOut 0.55s ease-out both;
+    }
+    @keyframes flashOut { 0% { opacity:1; } 100% { opacity:0; } }
+
+    /* ===== ロケット ===== */
+    .rocket-fly {
+      position: fixed; font-size: 2.8rem; line-height: 1;
+      z-index: 5000; pointer-events: none;
+      animation: rocketLaunch 1.15s cubic-bezier(0.2,0.8,0.3,1) both;
+    }
+    @keyframes rocketLaunch {
+      0%   { transform: rotate(-45deg) scale(1);   opacity: 1; }
+      55%  { opacity: 1; }
+      100% { transform: rotate(-45deg) translate(110vw,-110vh) scale(0.4); opacity: 0; }
+    }
+
+    /* ===== 紙吹雪 ===== */
+    .conf-piece {
+      position: fixed; border-radius: 3px;
+      z-index: 4999; pointer-events: none;
+      animation: confFly 1.05s ease-out both;
+    }
+    @keyframes confFly {
+      0%   { transform: translate(0,0) rotate(0deg) scale(1); opacity: 1; }
+      100% { transform: translate(var(--cx),var(--cy)) rotate(540deg) scale(0.2); opacity: 0; }
+    }
+
+    /* ===== 熱血マスコット ===== */
+    #mascot {
+      position: fixed;
+      bottom: 88px; right: 1.5rem;
+      z-index: 3000;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0; pointer-events: none;
+      opacity: 0;
+      transform: translateX(220px);
+      transition: opacity 0.35s, transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    #mascot.show { opacity: 1; transform: translateX(0); }
+
+    /* セリフ吹き出し */
+    .m-bubble {
+      position: relative;
+      background: #fff;
+      border: 3.5px solid #1a1612;
+      border-radius: 20px;
+      padding: 0.55rem 1.1rem;
+      font-weight: 900; font-size: 0.95rem;
+      color: #1a1612; white-space: nowrap;
+      box-shadow: 4px 4px 0 #1a1612;
+      margin-bottom: 9px;
+      text-align: center; line-height: 1.4;
+    }
+    .m-bubble::after {
+      content: ''; position: absolute;
+      bottom: -12px; left: 50%; transform: translateX(-50%);
+      border: 6px solid transparent; border-top: 9px solid #1a1612;
+    }
+    .m-bubble::before {
+      content: ''; position: absolute;
+      bottom: -7px; left: 50%; transform: translateX(-50%);
+      border: 5px solid transparent; border-top: 7px solid #fff;
+      z-index: 1;
+    }
+    /* キャラ本体 */
+    .m-char { display: flex; flex-direction: column; align-items: center; position: relative; }
+    /* オーラ */
+    .m-aura {
+      position: absolute; inset: -10px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,200,0,0.55) 0%, transparent 70%);
+      animation: auraPulse 0.65s ease-in-out infinite alternate;
+    }
+    @keyframes auraPulse {
+      from { transform: scale(0.88); opacity: 0.55; }
+      to   { transform: scale(1.18); opacity: 1; }
+    }
+    /* 髪のトゲ */
+    .m-hair { display: flex; justify-content: center; align-items: flex-end; gap: 2px; margin-bottom: -5px; position: relative; z-index: 2; }
+    .m-spike { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 22px solid #3d1f00; }
+    .m-spike:nth-child(1),.m-spike:nth-child(5) { border-bottom-width: 13px; }
+    .m-spike:nth-child(2),.m-spike:nth-child(4) { border-bottom-width: 18px; }
+    .m-spike:nth-child(3) { border-bottom-width: 26px; }
+    /* 顔 */
+    .m-face {
+      width: 64px; height: 64px;
+      background: #FBBF5B;
+      border-radius: 50%;
+      border: 3.5px solid #1a1612;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative;
+    }
+    .m-eyes { display: flex; gap: 14px; margin-bottom: 5px; }
+    .m-eye {
+      width: 11px; height: 11px;
+      background: #1a1612; border-radius: 50%;
+      position: relative;
+    }
+    /* 怒り眉 */
+    .m-eye::before {
+      content: ''; position: absolute;
+      top: -7px; left: -2px;
+      width: 15px; height: 3.5px;
+      background: #1a1612; border-radius: 2px;
+      transform: rotate(-18deg);
+    }
+    .m-eyes .m-eye:last-child::before { transform: rotate(18deg); left: -3px; }
+    .m-mouth {
+      width: 24px; height: 10px;
+      border: 3.5px solid #1a1612;
+      border-top: none;
+      border-radius: 0 0 14px 14px;
+      transition: all 0.3s ease;
+    }
+    /* ボディ（拳） */
+    .m-body { display: flex; gap: 2px; font-size: 1.65rem; margin-top: 3px; line-height: 1; }
+
+    /* 登場アニメ */
+    #mascot.show .m-char { animation: charJump 0.6s cubic-bezier(0.34,1.56,0.64,1) both; }
+    @keyframes charJump {
+      0%   { transform: translateY(22px) scale(0.4); opacity:0; }
+      55%  { transform: translateY(-16px) scale(1.1); opacity:1; }
+      80%  { transform: translateY(-6px) scale(1.02); }
+      100% { transform: translateY(0) scale(1); opacity:1; }
+    }
+    #mascot.show .m-bubble { animation: bubblePopIn 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.18s both; }
+    @keyframes bubblePopIn {
+      from { transform: scale(0) translateY(10px); opacity:0; }
+      to   { transform: scale(1) translateY(0); opacity:1; }
+    }
+
+    /* 興奮状態（2〜3問目） */
+    #mascot.excited .m-char { animation: charExcited 0.28s ease-in-out 5 !important; }
+    @keyframes charExcited {
+      0%,100% { transform: rotate(0deg); }
+      25%  { transform: rotate(-9deg) translateY(-5px); }
+      75%  { transform: rotate(9deg)  translateY(-5px); }
+    }
+    #mascot.excited .m-aura { animation-duration: 0.3s; }
+
+    /* 最興奮（4問全選択） */
+    #mascot.max-excited .m-aura {
+      animation-duration: 0.18s;
+      background: radial-gradient(circle, rgba(255,100,0,0.75) 0%, transparent 70%);
+    }
+    #mascot.max-excited .m-char { animation: charMaxSpin 0.7s cubic-bezier(0.34,1.56,0.64,1) both !important; }
+    @keyframes charMaxSpin {
+      0%   { transform: scale(0.4) rotate(-200deg); opacity:0; }
+      100% { transform: scale(1.12) rotate(0deg); opacity:1; }
+    }
+    #mascot.max-excited .m-body { animation: fistPump 0.22s ease-in-out infinite alternate; }
+    @keyframes fistPump {
+      from { transform: translateY(0); }
+      to   { transform: translateY(-8px); }
+    }
   </style>
 </head>
 <body>
@@ -872,6 +1032,23 @@
     <p class="closing-signature">留樹</p>
   </section>
 
+  <!-- 熱血マスコットキャラ -->
+  <div id="mascot">
+    <div class="m-bubble"><span id="m-text">いいぞー！！</span></div>
+    <div class="m-char">
+      <div class="m-aura"></div>
+      <div class="m-hair">
+        <div class="m-spike"></div><div class="m-spike"></div><div class="m-spike"></div>
+        <div class="m-spike"></div><div class="m-spike"></div>
+      </div>
+      <div class="m-face">
+        <div class="m-eyes"><div class="m-eye"></div><div class="m-eye"></div></div>
+        <div class="m-mouth" id="m-mouth"></div>
+      </div>
+      <div class="m-body">✊🏻✊🏻</div>
+    </div>
+  </div>
+
   <p class="nav-hint">↓ スクロールで続きを読む</p>
 
   <script>
@@ -1052,13 +1229,116 @@
     setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 700);
   }
 
+  /* ===== 画面フラッシュ ===== */
+  function screenFlash(col) {
+    var el = document.createElement('div');
+    el.className = 'screen-flash';
+    el.style.background = col || 'rgba(201,168,108,0.4)';
+    document.body.appendChild(el);
+    setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 600);
+  }
+
+  /* ===== ロケット打ち上げ ===== */
+  function launchRocket(card) {
+    var r = card.getBoundingClientRect();
+    var el = document.createElement('div');
+    el.className = 'rocket-fly';
+    el.textContent = '🚀';
+    el.style.left = (r.left + r.width/2 - 22) + 'px';
+    el.style.top  = (r.top  + r.height/2 - 22) + 'px';
+    document.body.appendChild(el);
+    setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 1250);
+  }
+
+  /* ===== カラフル紙吹雪 ===== */
+  var CONF_COLORS = ['#f0b429','#e84040','#4096e8','#40c878','#e840c0','#a67c52','#ffffff','#ffec40'];
+  function burstConfetti(card, n) {
+    var r = card.getBoundingClientRect();
+    var ox = r.left + r.width/2, oy = r.top + r.height/2;
+    n = n || 22;
+    for (var i = 0; i < n; i++) {
+      (function(i) {
+        var el = document.createElement('div');
+        el.className = 'conf-piece';
+        var ang  = (i/n)*360 + Math.random()*22 - 11;
+        var dist = 75 + Math.random()*110;
+        var cx   = Math.cos(ang*Math.PI/180)*dist;
+        var cy   = Math.sin(ang*Math.PI/180)*dist - 35;
+        var sz   = 7 + Math.random()*10;
+        el.style.cssText =
+          'left:'+ox+'px;top:'+oy+'px;' +
+          'width:'+sz+'px;height:'+sz+'px;' +
+          'background:'+CONF_COLORS[i%CONF_COLORS.length]+';' +
+          '--cx:'+cx+'px;--cy:'+cy+'px;' +
+          'animation-delay:'+(Math.random()*0.1)+'s;';
+        document.body.appendChild(el);
+        setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 1200);
+      })(i);
+    }
+  }
+
+  /* ===== 熱血マスコット ===== */
+  var mascotTimer = null;
+  var MASCOT_DATA = [
+    null,
+    { text: 'おっ！いいぞー！！',         excited: false, max: false },
+    { text: 'その調子！！熱い！！',         excited: true,  max: false },
+    { text: 'ラスト1問！！\n燃えろ！！',   excited: true,  max: false },
+    { text: 'よっしゃー！！\n決まったぞ！！', excited: true, max: true  }
+  ];
+  function showMascot(cnt) {
+    var data = MASCOT_DATA[cnt];
+    if (!data) return;
+    var mascot = document.getElementById('mascot');
+    var textEl = document.getElementById('m-text');
+    var mouth  = document.getElementById('m-mouth');
+
+    mascot.classList.remove('show','excited','max-excited');
+    void mascot.offsetWidth;
+
+    textEl.innerHTML = data.text.replace('\n','<br>');
+
+    if (data.max) {
+      mouth.style.cssText = 'width:30px;height:16px;border:3.5px solid #1a1612;border-top:none;border-radius:0 0 18px 18px;';
+    } else if (data.excited) {
+      mouth.style.cssText = 'width:26px;height:12px;border:3.5px solid #1a1612;border-top:none;border-radius:0 0 15px 15px;';
+    } else {
+      mouth.style.cssText = '';
+    }
+
+    setTimeout(function() {
+      mascot.classList.add('show');
+      if (data.max) {
+        setTimeout(function() { mascot.classList.add('max-excited'); }, 200);
+      } else if (data.excited) {
+        setTimeout(function() { mascot.classList.add('excited'); }, 280);
+      }
+    }, 50);
+
+    if (mascotTimer) clearTimeout(mascotTimer);
+    if (!data.max) {
+      mascotTimer = setTimeout(function() {
+        mascot.classList.remove('show','excited','max-excited');
+      }, 3400);
+    }
+  }
+
   /* Bind */
   document.querySelectorAll('.choice-card').forEach(function(card) {
     card.addEventListener('click', function(e) {
       var choicesEl = this.closest('.choices');
       var q = choicesEl.getAttribute('data-q');
+
       ripple(this, e);
+      launchRocket(this);
+
       choices[q] = this.getAttribute('data-value');
+      var cnt = qKeys.filter(function(k) { return choices[k]; }).length;
+
+      burstConfetti(this, cnt === 4 ? 44 : 24);
+      screenFlash(cnt === 4 ? 'rgba(255,160,0,0.42)' : 'rgba(201,168,108,0.35)');
+      showMascot(cnt);
+
       choicesEl.querySelectorAll('.choice-card').forEach(function(c) { c.classList.remove('selected'); });
       this.classList.add('selected');
       this.querySelector('input').checked = true;
