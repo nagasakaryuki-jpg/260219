@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>萌々子の誕生日 — 旅のしおり</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a1612;
+      --paper: #faf8f5;
+      --gold: #a67c52;
+      --gold-light: #c9a86c;
+      --gold-bg: rgba(166, 124, 82, 0.08);
+      --border: #e5ddd0;
+      --white: #fff;
+      --shadow: 0 8px 32px rgba(26, 22, 18, 0.08);
+      --shadow-strong: 0 12px 40px rgba(26, 22, 18, 0.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.75;
+    }
+
+    /* ========== ヒーロー ========== */
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(26,22,18,0.35) 0%, rgba(26,22,18,0.5) 100%),
+        url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&q=85') center/cover no-repeat;
+    }
+    .hero-inner { position: relative; z-index: 2; padding: 2rem; max-width: 560px; }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 6vw, 3.5rem);
+      font-weight: 600;
+      color: var(--white);
+      text-shadow: 0 2px 24px rgba(0,0,0,0.4);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+    .hero .sub { color: rgba(255,255,255,0.95); font-size: clamp(1rem, 2.5vw, 1.2rem); font-weight: 300; letter-spacing: 0.2em; }
+    .hero .date {
+      margin-top: 2rem;
+      color: var(--gold-light);
+      font-size: clamp(0.9rem, 2vw, 1rem);
+      letter-spacing: 0.25em;
+    }
+
+    /* ========== 共通セクション ========== */
+    section { padding: 4rem 1.5rem; max-width: 960px; margin: 0 auto; }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.6rem, 4vw, 2rem);
+      color: var(--gold);
+      text-align: center;
+      margin-bottom: 2rem;
+      letter-spacing: 0.05em;
+    }
+    .section-intro { text-align: center; margin-bottom: 2.5rem; color: var(--ink); opacity: 0.9; }
+
+    /* ========== 固定予定（写真付き） ========== */
+    .fixed-schedule { background: var(--gold-bg); border-radius: 20px; padding: 2rem; margin: 2rem 0; }
+    .schedule-table { width: 100%; border-collapse: collapse; font-size: 1rem; }
+    .schedule-table th, .schedule-table td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid var(--border); }
+    .schedule-table th { color: var(--gold); font-weight: 600; width: 32%; }
+    .schedule-table tr:last-child th, .schedule-table tr:last-child td { border-bottom: none; }
+    .img-block {
+      border-radius: 16px;
+      overflow: hidden;
+      margin: 2rem 0;
+      box-shadow: var(--shadow);
+    }
+    .img-block img { width: 100%; height: 280px; object-fit: cover; display: block; }
+    .img-block .cap { padding: 0.75rem 1rem; background: var(--white); font-size: 0.85rem; color: var(--gold); text-align: center; }
+    .img-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 2rem 0; }
+    @media (max-width: 600px) { .img-grid { grid-template-columns: 1fr; } }
+    .img-grid .img-block { margin: 0; }
+    .img-grid .img-block img { height: 200px; }
+
+    /* ========== プラン最適化（選択肢） ========== */
+    .optimizer { background: linear-gradient(180deg, var(--white) 0%, var(--gold-bg) 100%); border-radius: 24px; padding: 2.5rem; box-shadow: var(--shadow); }
+    .optimizer h3 { font-size: 1.1rem; color: var(--gold); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+    .choice-group { margin-bottom: 2rem; }
+    .choice-group label { display: block; font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--ink); }
+    .choices {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    .choice-card {
+      flex: 1 1 140px;
+      min-width: 120px;
+      padding: 1rem;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-align: center;
+      background: var(--white);
+    }
+    .choice-card:hover { border-color: var(--gold-light); background: var(--gold-bg); }
+    .choice-card.selected { border-color: var(--gold); background: var(--gold-bg); box-shadow: 0 0 0 1px var(--gold); }
+    .choice-card input { display: none; }
+    .choice-card .icon { font-size: 1.5rem; margin-bottom: 0.35rem; }
+    .choice-card .label { font-size: 0.9rem; font-weight: 500; color: var(--ink); }
+    .result-banner {
+      margin-top: 1.5rem;
+      padding: 1.25rem 1.5rem;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      color: var(--white);
+      border-radius: 12px;
+      text-align: center;
+      font-weight: 500;
+      display: none;
+    }
+    .result-banner.visible { display: block; animation: fadeIn 0.5s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+    .result-banner .plan-name { font-size: 1.15rem; margin-bottom: 0.25rem; }
+    .result-banner .plan-desc { font-size: 0.9rem; opacity: 0.95; }
+
+    /* ========== プランカード（並び替え対応） ========== */
+    #plan-list { margin-top: 2rem; }
+    .plan-block {
+      background: var(--white);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow);
+      border: 2px solid transparent;
+      transition: all 0.35s ease;
+    }
+    .plan-block.recommended { border-color: var(--gold); box-shadow: var(--shadow-strong); }
+    .plan-block .plan-img { width: 100%; height: 220px; object-fit: cover; }
+    .plan-block .plan-body { padding: 1.75rem 2rem; }
+    .plan-block .plan-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+    .plan-block .plan-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--gold); font-weight: 600; }
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: var(--gold);
+      color: var(--white);
+      font-size: 0.75rem;
+      border-radius: 999px;
+      letter-spacing: 0.05em;
+    }
+    .plan-card { background: var(--gold-bg); border-radius: 12px; padding: 1.25rem 1.5rem; margin: 1rem 0; }
+    .plan-card h4 { font-size: 0.95rem; color: var(--gold); margin-bottom: 0.6rem; }
+    .plan-block ul { list-style: none; }
+    .plan-block li { padding-left: 1rem; position: relative; margin-bottom: 0.4rem; font-size: 0.95rem; }
+    .plan-block li::before { content: '・'; position: absolute; left: 0; color: var(--gold-light); }
+    .plan-block .point { margin-top: 1rem; font-size: 0.9rem; color: var(--ink); opacity: 0.9; }
+    .plan-block .point strong { color: var(--gold); }
+
+    /* ========== チェックリスト ========== */
+    .checklist { background: var(--gold-bg); border-radius: 20px; padding: 2rem; }
+    .checklist ul { list-style: none; }
+    .checklist li { padding: 0.6rem 0 0.6rem 2rem; position: relative; font-size: 0.95rem; }
+    .checklist li::before { content: '✓'; position: absolute; left: 0; color: var(--gold); font-weight: 700; }
+    .closing { text-align: center; margin-top: 3rem; font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--gold); }
+    .closing-signature { text-align: center; margin-top: 0.75rem; font-size: 0.95rem; color: var(--gold-light); letter-spacing: 0.1em; }
+
+    /* ========== ナビヒント ========== */
+    .nav-hint {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.8rem;
+      color: var(--gold-light);
+      letter-spacing: 0.1em;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-inner">
+      <h1>旅のしおり</h1>
+      <p class="sub">萌々子の誕生日</p>
+      <p class="date">2月20日（金）夜 〜 2月21日（土）</p>
+    </div>
+  </header>
+
+  <section id="fixed">
+    <h2 class="section-title">決まっている予定</h2>
+    <p class="section-intro">土曜のメイン予定はこちら。金曜夜と土曜の過ごし方で、最適なプランを一緒に選びましょう。</p>
+    <div class="img-grid">
+      <div class="img-block">
+        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80" alt="渋谷・買い物">
+        <p class="cap">土曜・日中 — 渋谷などで買い物</p>
+      </div>
+      <div class="img-block">
+        <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80" alt="代官山・レストラン">
+        <p class="cap">土曜 19:00〜 — 代官山のレストラン</p>
+      </div>
+    </div>
+    <div class="fixed-schedule">
+      <table class="schedule-table">
+        <tr><th>土曜・日中</th><td>渋谷などで買い物</td></tr>
+        <tr><th>土曜・19:00〜</th><td>代官山のレストラン</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section id="optimizer-section">
+    <h2 class="section-title">あなたの希望を選んでください</h2>
+    <p class="section-intro">下の選択肢を選ぶと、ぴったりのプランがおすすめ表示されます。</p>
+    <div class="optimizer">
+      <div class="choice-group">
+        <h3>金曜の夜はどう過ごしたい？</h3>
+        <div class="choices" data-q="friday">
+          <label class="choice-card" data-value="relax">
+            <input type="radio" name="friday" value="relax">
+            <span class="icon">🏠</span>
+            <span class="label">ゆったり自宅・近場</span>
+          </label>
+          <label class="choice-card" data-value="go_out">
+            <input type="radio" name="friday" value="go_out">
+            <span class="icon">🍸</span>
+            <span class="label">バー・ラウンジで非日常</span>
+          </label>
+          <label class="choice-card" data-value="movie">
+            <input type="radio" name="friday" value="movie">
+            <span class="icon">🎬</span>
+            <span class="label">映画・イベント</span>
+          </label>
+          <label class="choice-card" data-value="sweets">
+            <input type="radio" name="friday" value="sweets">
+            <span class="icon">🍰</span>
+            <span class="label">スイーツ・カフェ巡り</span>
+          </label>
+          <label class="choice-card" data-value="stay_late">
+            <input type="radio" name="friday" value="stay_late">
+            <span class="icon">🌃</span>
+            <span class="label">夜更かし・ナイトライフ</span>
+          </label>
+        </div>
+      </div>
+      <div class="choice-group">
+        <h3>土曜は何を重視したい？</h3>
+        <div class="choices" data-q="saturday">
+          <label class="choice-card" data-value="shopping">
+            <input type="radio" name="saturday" value="shopping">
+            <span class="icon">🛍️</span>
+            <span class="label">買い物をたっぷり</span>
+          </label>
+          <label class="choice-card" data-value="daikanyama">
+            <input type="radio" name="saturday" value="daikanyama">
+            <span class="icon">☕</span>
+            <span class="label">代官山の雰囲気</span>
+          </label>
+          <label class="choice-card" data-value="balance">
+            <input type="radio" name="saturday" value="balance">
+            <span class="icon">⚖️</span>
+            <span class="label">バランスよく</span>
+          </label>
+          <label class="choice-card" data-value="photo">
+            <input type="radio" name="saturday" value="photo">
+            <span class="icon">📷</span>
+            <span class="label">フォトスポット・映え</span>
+          </label>
+          <label class="choice-card" data-value="gourmet">
+            <input type="radio" name="saturday" value="gourmet">
+            <span class="icon">🍽️</span>
+            <span class="label">ランチも含めて食を楽しむ</span>
+          </label>
+        </div>
+      </div>
+      <div class="choice-group">
+        <h3>ペースはどれがいい？</h3>
+        <div class="choices" data-q="pace">
+          <label class="choice-card" data-value="easy">
+            <input type="radio" name="pace" value="easy">
+            <span class="icon">🌙</span>
+            <span class="label">ゆったり</span>
+          </label>
+          <label class="choice-card" data-value="medium">
+            <input type="radio" name="pace" value="medium">
+            <span class="icon">🍂</span>
+            <span class="label">ほどほど</span>
+          </label>
+          <label class="choice-card" data-value="full">
+            <input type="radio" name="pace" value="full">
+            <span class="icon">✨</span>
+            <span class="label">しっかり楽しむ</span>
+          </label>
+        </div>
+      </div>
+      <div class="choice-group">
+        <h3>どんな特別感を味わいたい？</h3>
+        <div class="choices" data-q="vibe">
+          <label class="choice-card" data-value="classic">
+            <input type="radio" name="vibe" value="classic">
+            <span class="icon">💐</span>
+            <span class="label">王道・定番の特別感</span>
+          </label>
+          <label class="choice-card" data-value="photo_friendly">
+            <input type="radio" name="vibe" value="photo_friendly">
+            <span class="icon">✨</span>
+            <span class="label">フォト映え・思い出に残る</span>
+          </label>
+          <label class="choice-card" data-value="gourmet">
+            <input type="radio" name="vibe" value="gourmet">
+            <span class="icon">🍷</span>
+            <span class="label">食をとことん楽しむ</span>
+          </label>
+          <label class="choice-card" data-value="non_daily">
+            <input type="radio" name="vibe" value="non_daily">
+            <span class="icon">🌟</span>
+            <span class="label">非日常・ちょっと冒険</span>
+          </label>
+        </div>
+      </div>
+      <div class="result-banner" id="result-banner">
+        <div class="plan-name" id="result-plan-name"></div>
+        <div class="plan-desc" id="result-plan-desc"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="plans">
+    <h2 class="section-title">プラン一覧</h2>
+    <p class="section-intro">選択した希望に合わせて、おすすめのプランが上に表示されます。</p>
+    <div id="plan-list">
+      <!-- JSで並び替え -->
+      <div class="plan-block" data-plan="A">
+        <img class="plan-img" src="https://images.unsplash.com/photo-1557925923-cd4648e211a0?w=800&q=80" alt="プランA">
+        <div class="plan-body">
+          <div class="plan-header">
+            <span class="plan-title">プランA：金曜はゆったり、土曜は渋谷集中</span>
+            <span class="badge recommended-badge" style="display:none;">あなたにおすすめ</span>
+          </div>
+          <div class="plan-card">
+            <h4>金曜夜</h4>
+            <ul>
+              <li>自宅または近場で誕生日前夜のディナー（手作り or お気に入り店）</li>
+              <li>翌日に備えて早めに就寝</li>
+            </ul>
+          </div>
+          <div class="plan-card">
+            <h4>土曜</h4>
+            <ul>
+              <li>午前：渋谷で買い物（スクランブル周辺・マークシティ等）</li>
+              <li>午後：カフェで休憩 → 代官山へ移動し、19時レストラン</li>
+            </ul>
+          </div>
+          <p class="point"><strong>おすすめポイント：</strong>無理のないペースで、買い物と食事を楽しめる。</p>
+        </div>
+      </div>
+
+      <div class="plan-block" data-plan="B">
+        <img class="plan-img" src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800&q=80" alt="プランB">
+        <div class="plan-body">
+          <div class="plan-header">
+            <span class="plan-title">プランB：金曜から非日常気分</span>
+            <span class="badge recommended-badge" style="display:none;">あなたにおすすめ</span>
+          </div>
+          <div class="plan-card">
+            <h4>金曜夜</h4>
+            <ul>
+              <li>都内のバーやラウンジで前夜祭（夜景の見えるスポットなど）</li>
+              <li>ホテルのバーや高層ビルのラウンジで乾杯</li>
+            </ul>
+          </div>
+          <div class="plan-card">
+            <h4>土曜</h4>
+            <ul>
+              <li>午前〜昼：渋谷で買い物</li>
+              <li>15時頃：代官山に移動し、カフェや雑貨店でぶらり</li>
+              <li>19時：代官山のレストラン</li>
+            </ul>
+          </div>
+          <p class="point"><strong>おすすめポイント：</strong>前日から特別感を出したい方に。代官山で午後を過ごすと夜の予定にスムーズ。</p>
+        </div>
+      </div>
+
+      <div class="plan-block" data-plan="C">
+        <img class="plan-img" src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&q=80" alt="プランC">
+        <div class="plan-body">
+          <div class="plan-header">
+            <span class="plan-title">プランC：金曜は映画・イベント、土曜は買い物メイン</span>
+            <span class="badge recommended-badge" style="display:none;">あなたにおすすめ</span>
+          </div>
+          <div class="plan-card">
+            <h4>金曜夜</h4>
+            <ul>
+              <li>映画館で最新作や萌々子の好きなジャンルの映画</li>
+              <li>上映後に軽く食事やスイーツ</li>
+            </ul>
+          </div>
+          <div class="plan-card">
+            <h4>土曜</h4>
+            <ul>
+              <li>渋谷で買い物（百貨店・雑貨・アパレルなど）</li>
+              <li>午後は代官山へ。レストラン前にフォトスポットやカフェでひと休み</li>
+              <li>19時：代官山のレストラン</li>
+            </ul>
+          </div>
+          <p class="point"><strong>おすすめポイント：</strong>映画好きなら金曜の夜が特別な思い出に。土曜は買い物に集中。</p>
+        </div>
+      </div>
+
+      <div class="plan-block" data-plan="D">
+        <img class="plan-img" src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80" alt="プランD">
+        <div class="plan-body">
+          <div class="plan-header">
+            <span class="plan-title">プランD：代官山を丸一日楽しむ</span>
+            <span class="badge recommended-badge" style="display:none;">あなたにおすすめ</span>
+          </div>
+          <div class="plan-card">
+            <h4>金曜夜</h4>
+            <ul>
+              <li>自宅でケーキとシャンパン（またはノンアル）で前夜祝い</li>
+            </ul>
+          </div>
+          <div class="plan-card">
+            <h4>土曜</h4>
+            <ul>
+              <li>午前：渋谷で買い物（午前中で切り上げ）</li>
+              <li>昼過ぎ：代官山へ。カフェ・雑貨・ブックショップ・洋服などで散策</li>
+              <li>19時：代官山のレストラン</li>
+            </ul>
+          </div>
+          <p class="point"><strong>おすすめポイント：</strong>代官山の雰囲気をたっぷり味わいたい方に。移動も少なく効率的。</p>
+        </div>
+      </div>
+
+      <div class="plan-block" data-plan="E">
+        <img class="plan-img" src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=80" alt="プランE">
+        <div class="plan-body">
+          <div class="plan-header">
+            <span class="plan-title">プランE：金曜はスイーツ巡り、土曜はフォト映え</span>
+            <span class="badge recommended-badge" style="display:none;">あなたにおすすめ</span>
+          </div>
+          <div class="plan-card">
+            <h4>金曜夜</h4>
+            <ul>
+              <li>都内のスイーツやカフェを2〜3店はしご（代官山・恵比寿・渋谷など）</li>
+              <li>フォトジェニックなケーキで前夜祝い</li>
+            </ul>
+          </div>
+          <div class="plan-card">
+            <h4>土曜</h4>
+            <ul>
+              <li>午前：渋谷で買い物</li>
+              <li>午後：代官山へ。フォトスポットや映えカフェで撮影しながら散策</li>
+              <li>19時：代官山のレストラン</li>
+            </ul>
+          </div>
+          <p class="point"><strong>おすすめポイント：</strong>写真に残る思い出をたくさん作りたい方に。金曜から映えを意識したルートで。</p>
+        </div>
+      </div>
+
+      <div class="plan-block" data-plan="F">
+        <img class="plan-img" src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80" alt="プランF">
+        <div class="plan-body">
+          <div class="plan-header">
+            <span class="plan-title">プランF：金曜は夜更かし、土曜は食を堪能</span>
+            <span class="badge recommended-badge" style="display:none;">あなたにおすすめ</span>
+          </div>
+          <div class="plan-card">
+            <h4>金曜夜</h4>
+            <ul>
+              <li>都内のバーやナイトスポットで夜更かし（夜景ラウンジ・ライブバーなど）</li>
+              <li>翌日は少し遅めスタートでリフレッシュ</li>
+            </ul>
+          </div>
+          <div class="plan-card">
+            <h4>土曜</h4>
+            <ul>
+              <li>遅めのブランチ or 渋谷でランチをゆっくり</li>
+              <li>買い物の合間にスイーツやドリンクで休憩</li>
+              <li>19時：代官山のレストランでメインのディナー</li>
+            </ul>
+          </div>
+          <p class="point"><strong>おすすめポイント：</strong>食を軸に一日楽しみたい方に。金曜の夜も土曜のランチもディナーも満喫。</p>
+        </div>
+      </div>
+
+      <div class="plan-block" data-plan="G">
+        <img class="plan-img" src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&q=80" alt="プランG">
+        <div class="plan-body">
+          <div class="plan-header">
+            <span class="plan-title">プランG：ほどほどに、いろいろ楽しむ</span>
+            <span class="badge recommended-badge" style="display:none;">あなたにおすすめ</span>
+          </div>
+          <div class="plan-card">
+            <h4>金曜夜</h4>
+            <ul>
+              <li>自宅でケーキや軽い食事、または近場のカフェで一息</li>
+              <li>無理せず翌日に備える</li>
+            </ul>
+          </div>
+          <div class="plan-card">
+            <h4>土曜</h4>
+            <ul>
+              <li>渋谷で買い物＋代官山散策をほどほどに</li>
+              <li>詰め込みすぎず、カフェ休憩やフォトタイムも挟む</li>
+              <li>19時：代官山のレストラン</li>
+            </ul>
+          </div>
+          <p class="point"><strong>おすすめポイント：</strong>「全部やる」より「無理なく楽しむ」派に。バランス型で疲れにくい。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="checklist">
+    <h2 class="section-title">チェックリスト・メモ</h2>
+    <div class="img-block">
+      <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=1200&q=80" alt="東京">
+      <p class="cap">萌々子、素敵な誕生日になりますように</p>
+    </div>
+    <div class="checklist">
+      <ul>
+        <li>レストランの予約確認（代官山・19時）</li>
+        <li>金曜夜の予約が必要な場合は早めに</li>
+        <li>土曜の天気・服装の確認</li>
+        <li>代官山への経路（渋谷からの電車・バスなど）</li>
+        <li>誕生日プレゼントの用意</li>
+      </ul>
+    </div>
+    <p class="closing">— 萌々子、素敵な誕生日になりますように —</p>
+    <p class="closing-signature">留樹</p>
+  </section>
+
+  <p class="nav-hint">↓ スクロールで続きを読む</p>
+
+  <script>
+(function() {
+  var planIds = ['A','B','C','D','E','F','G'];
+  // 選択肢 → プラン得点
+  var scores = {
+    friday: {
+      relax:    { A: 2, B: 0, C: 0, D: 2, E: 0, F: 0, G: 1 },
+      go_out:   { A: 0, B: 2, C: 0, D: 0, E: 0, F: 0, G: 0 },
+      movie:    { A: 0, B: 0, C: 2, D: 0, E: 0, F: 0, G: 0 },
+      sweets:   { A: 0, B: 0, C: 0, D: 0, E: 2, F: 0, G: 0 },
+      stay_late:{ A: 0, B: 0, C: 0, D: 0, E: 0, F: 2, G: 0 }
+    },
+    saturday: {
+      shopping:   { A: 2, B: 0, C: 2, D: 0, E: 0, F: 0, G: 1 },
+      daikanyama: { A: 0, B: 2, C: 0, D: 2, E: 0, F: 0, G: 0 },
+      balance:    { A: 1, B: 1, C: 1, D: 1, E: 0, F: 0, G: 2 },
+      photo:      { A: 0, B: 0, C: 0, D: 0, E: 2, F: 0, G: 1 },
+      gourmet:    { A: 0, B: 0, C: 0, D: 0, E: 0, F: 2, G: 0 }
+    },
+    pace: {
+      easy:   { A: 2, B: 0, C: 0, D: 2, E: 0, F: 0, G: 0 },
+      medium: { A: 0, B: 0, C: 0, D: 0, E: 2, F: 0, G: 2 },
+      full:   { A: 0, B: 2, C: 2, D: 0, E: 0, F: 1, G: 0 }
+    },
+    vibe: {
+      classic:       { A: 1, B: 0, C: 0, D: 0, E: 0, F: 0, G: 2 },
+      photo_friendly:{ A: 0, B: 0, C: 0, D: 0, E: 2, F: 0, G: 0 },
+      gourmet:       { A: 0, B: 0, C: 0, D: 0, E: 0, F: 2, G: 0 },
+      non_daily:     { A: 0, B: 2, C: 0, D: 0, E: 0, F: 0, G: 0 }
+    }
+  };
+
+  var planNames = {
+    A: 'プランA：金曜はゆったり、土曜は渋谷集中',
+    B: 'プランB：金曜から非日常気分',
+    C: 'プランC：金曜は映画・イベント、土曜は買い物メイン',
+    D: 'プランD：代官山を丸一日楽しむ',
+    E: 'プランE：金曜はスイーツ巡り、土曜はフォト映え',
+    F: 'プランF：金曜は夜更かし、土曜は食を堪能',
+    G: 'プランG：ほどほどに、いろいろ楽しむ'
+  };
+  var planDescs = {
+    A: 'ゆったりペースで、買い物と食事を楽しむプランです。',
+    B: '前日から非日常で、代官山の午後も満喫するプランです。',
+    C: '金曜は映画で思い出づくり、土曜は買い物メインのプランです。',
+    D: '代官山の雰囲気をたっぷり味わう、効率的なプランです。',
+    E: '写真に残る思い出をたくさん作る、映え重視のプランです。',
+    F: '食を軸に金曜夜から土曜ディナーまで堪能するプランです。',
+    G: '無理なくバランスよく楽しむ、ほどほど派向けのプランです。'
+  };
+
+  var choices = { friday: null, saturday: null, pace: null, vibe: null };
+
+  var questionKeys = ['friday', 'saturday', 'pace', 'vibe'];
+
+  function getScores() {
+    var total = { A: 0, B: 0, C: 0, D: 0, E: 0, F: 0, G: 0 };
+    questionKeys.forEach(function(qKey) {
+      var qScores = scores[qKey];
+      if (!qScores) return;
+      var val = choices[qKey];
+      if (val && qScores[val]) {
+        planIds.forEach(function(p) { total[p] += qScores[val][p] || 0; });
+      }
+    });
+    return total;
+  }
+
+  function getRankedPlans() {
+    var total = getScores();
+    return planIds.slice().sort(function(a, b) { return (total[b] || 0) - (total[a] || 0); });
+  }
+
+  function updateUI() {
+    var ranked = getRankedPlans();
+    var allSelected = choices.friday && choices.saturday && choices.pace && choices.vibe;
+    var list = document.getElementById('plan-list');
+    var blocks = [].slice.call(list.querySelectorAll('.plan-block'));
+
+    // おすすめバッジを一度外す
+    blocks.forEach(function(block) {
+      block.classList.remove('recommended');
+      var badge = block.querySelector('.recommended-badge');
+      if (badge) badge.style.display = 'none';
+    });
+
+    if (allSelected) {
+      var best = ranked[0];
+      var bestBlock = list.querySelector('.plan-block[data-plan="' + best + '"]');
+      if (bestBlock) {
+        bestBlock.classList.add('recommended');
+        var badge = bestBlock.querySelector('.recommended-badge');
+        if (badge) badge.style.display = 'inline-block';
+      }
+
+      var banner = document.getElementById('result-banner');
+      document.getElementById('result-plan-name').textContent = planNames[best];
+      document.getElementById('result-plan-desc').textContent = planDescs[best];
+      banner.classList.add('visible');
+    } else {
+      document.getElementById('result-banner').classList.remove('visible');
+    }
+
+    // 並び替え：ランキング順にDOMを並べ替え
+    ranked.forEach(function(plan) {
+      var block = list.querySelector('.plan-block[data-plan="' + plan + '"]');
+      if (block) list.appendChild(block);
+    });
+  }
+
+  function bindChoices() {
+    document.querySelectorAll('.choice-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        var q = this.closest('.choice-group').querySelector('.choices').getAttribute('data-q');
+        var value = this.getAttribute('data-value');
+        choices[q] = value;
+        document.querySelectorAll('.choices[data-q="' + q + '"] .choice-card').forEach(function(c) { c.classList.remove('selected'); });
+        this.classList.add('selected');
+        this.querySelector('input').checked = true;
+        updateUI();
+      });
+    });
+  }
+
+  bindChoices();
+  updateUI();
+})();
+  </script>
+</body>
+</html>
