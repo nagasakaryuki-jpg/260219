@@ -590,42 +590,14 @@
       from { transform: scale(0.88); opacity: 0.55; }
       to   { transform: scale(1.18); opacity: 1; }
     }
-    /* 赤ちゃん髪の毛 */
-    .m-hair { display: flex; justify-content: center; align-items: flex-end; gap: 3px; margin-bottom: -4px; position: relative; z-index: 2; }
-    .m-tuft { background: #8B5E3C; border-radius: 50% 50% 0 0; width: 13px; height: 17px; }
-    .m-tuft:first-child, .m-tuft:last-child { width: 9px; height: 12px; }
-    .m-bow { font-size: 1.1rem; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); line-height: 1; }
-    /* 顔 */
-    .m-face {
-      width: 64px; height: 64px;
-      background: #FFD5B8;
-      border-radius: 50%;
-      border: 3.5px solid #1a1612;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      position: relative;
-    }
-    .m-eyes { display: flex; gap: 14px; margin-bottom: 5px; }
-    .m-eye {
-      width: 11px; height: 11px;
-      background: #1a1612; border-radius: 50%;
-      position: relative;
-    }
-    /* やさしい眉 */
-    .m-eye::before {
-      content: ''; position: absolute;
-      top: -7px; left: -2px;
-      width: 15px; height: 3px;
-      background: #1a1612; border-radius: 3px;
-      transform: rotate(-3deg);
-    }
-    .m-eyes .m-eye:last-child::before { transform: rotate(3deg); left: -3px; }
-    .m-mouth {
-      width: 24px; height: 10px;
-      border: 3.5px solid #1a1612;
-      border-top: none;
-      border-radius: 0 0 14px 14px;
-      transition: all 0.3s ease;
+    /* 咲空フォト */
+    .m-photo {
+      width: 80px; height: 80px;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+      position: relative; z-index: 2;
+      filter: drop-shadow(0 0 8px rgba(232,121,160,0.7));
     }
     /* ボディ */
     .m-body { display: flex; gap: 2px; font-size: 1.65rem; margin-top: 3px; line-height: 1; }
@@ -1031,19 +1003,12 @@
     <p class="closing-signature">留樹</p>
   </section>
 
-  <!-- 熱血マスコットキャラ -->
+  <!-- 咲空マスコット -->
   <div id="mascot">
-    <div class="m-bubble"><span id="m-text">いいぞー！！</span></div>
+    <div class="m-bubble"><span id="m-text">えへへ ✨ いいね！</span></div>
     <div class="m-char">
       <div class="m-aura"></div>
-      <div class="m-hair">
-        <div class="m-tuft"></div><div class="m-tuft"></div><div class="m-tuft"></div>
-        <span class="m-bow">🎀</span>
-      </div>
-      <div class="m-face">
-        <div class="m-eyes"><div class="m-eye"></div><div class="m-eye"></div></div>
-        <div class="m-mouth" id="m-mouth"></div>
-      </div>
+      <img class="m-photo" src="ロイきぬ/ロイきぬsakuramascot.png.png" alt="咲空">
       <div class="m-body">🌸🌸</div>
     </div>
   </div>
@@ -1290,20 +1255,11 @@
     if (!data) return;
     var mascot = document.getElementById('mascot');
     var textEl = document.getElementById('m-text');
-    var mouth  = document.getElementById('m-mouth');
 
     mascot.classList.remove('show','excited','max-excited');
     void mascot.offsetWidth;
 
     textEl.innerHTML = data.text.replace('\n','<br>');
-
-    if (data.max) {
-      mouth.style.cssText = 'width:30px;height:16px;border:3.5px solid #1a1612;border-top:none;border-radius:0 0 18px 18px;';
-    } else if (data.excited) {
-      mouth.style.cssText = 'width:26px;height:12px;border:3.5px solid #1a1612;border-top:none;border-radius:0 0 15px 15px;';
-    } else {
-      mouth.style.cssText = '';
-    }
 
     setTimeout(function() {
       mascot.classList.add('show');
